@@ -14,24 +14,22 @@ const Cadastro = () => {
 
     const cadastrar = async () => {
 
-        try {
-            const docRef = await addDoc(collection(db, "users"), {
-                first: "Alan",
-                middle: "Mathison",
-                last: "Turing",
-                born: 1912
-            });
-
-            console.log("Document written with ID: ", docRef.id);
-        } catch (e) {
-            console.error("Error adding document: ", e);
-        }
-
         setLoading(true);
-        /* createUserWithEmailAndPassword(auth, email, senha)
-            .then(() => {
-                const currentUser = auth.currentUser;                
+        createUserWithEmailAndPassword(auth, email, senha)
+            .then(async () => {
+                const currentUser = auth.currentUser;
 
+                try {
+                    const docRef = await addDoc(collection(db, "users"), {
+                        id: currentUser.uid,
+                        nome,
+                        email
+                    });
+
+                    console.log("Document written with ID: ", docRef.id);
+                } catch (e) {
+                    console.error("Error adding document: ", e);
+                }
             })
             .catch((error) => {
                 // console.log(error.code);
@@ -45,7 +43,7 @@ const Cadastro = () => {
             })
             .finally(() => {
                 setLoading(false)
-            }) */
+            })
     }
 
 
