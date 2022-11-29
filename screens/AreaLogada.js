@@ -1,13 +1,46 @@
 import { ActivityIndicator, Alert, Button, StyleSheet, Text, View } from 'react-native'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { auth } from "../config/firebaseConfig"
+import { auth, db } from "../config/firebaseConfig"
 import { signOut } from 'firebase/auth';
+import { collection, getDocs, doc, getDoc } from "firebase/firestore";
 
 const AreaLogada = ({ navigation }) => {
     const user = auth.currentUser;
-    console.log(user.email);
-    console.log(user.uid);
+    const [dados, setDados] = useState();
+
+    // console.log(user.email);
+    console.log("Usuário logado: " + user.uid);
+
+    useEffect(() => {
+
+        async function obterDadosDeUm() {
+            const docRef = doc(db, "users", "xrX8NsrDJ72zt6jb8T0D");
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                console.log("Document data:", docSnap.data());
+            } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+            }
+        }
+
+
+        async function obterDados() {
+            const querySnapshot = await getDocs(collection(db, "users"));
+            querySnapshot.forEach((doc) => {
+                console.log(`ID documento: ${doc.id}`);
+                console.log(`Nome: ${doc.data().nome}`);
+                console.log(`ID usuário: ${doc.data().id}`);
+                console.log("--")
+            });
+
+            console.log(querySnapshot.docChanges());
+        }
+
+        obterDadosDeUm();
+    }, [])
 
     const [loading, setLoading] = useState(false)
 

@@ -19,6 +19,8 @@ const Cadastro = () => {
             .then(async () => {
                 const currentUser = auth.currentUser;
 
+                /* essa doc ajudou:
+                https://firebase.google.com/docs/firestore/quickstart */
                 try {
                     const docRef = await addDoc(collection(db, "users"), {
                         id: currentUser.uid,
