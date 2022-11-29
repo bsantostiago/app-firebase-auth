@@ -1,20 +1,79 @@
-import { Button, StyleSheet, TextInput, View } from 'react-native'
+import { ActivityIndicator, Alert, Button, StyleSheet, Text, TextInput, View } from 'react-native'
+import { useState } from 'react'
+import { auth, db } from "../config/firebaseConfig"
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+
+import { collection, getDocs, addDoc } from "firebase/firestore";
 
 const Cadastro = () => {
+    const [nome, setNome] = useState("");
+    const [email, setEmail] = useState("");
+    const [senha, setSenha] = useState("");
+
+    const [loading, setLoading] = useState(false)
+
+    const cadastrar = async () => {
+
+        try {
+            const docRef = await addDoc(collection(db, "users"), {
+                first: "Alan",
+                middle: "Mathison",
+                last: "Turing",
+                born: 1912
+            });
+
+            console.log("Document written with ID: ", docRef.id);
+        } catch (e) {
+            console.error("Error adding document: ", e);
+        }
+
+        setLoading(true);
+        /* createUserWithEmailAndPassword(auth, email, senha)
+            .then(() => {
+                const currentUser = auth.currentUser;                
+
+            })
+            .catch((error) => {
+                // console.log(error.code);
+                switch (error.code) {
+                    case 'auth/email-already-in-use':
+                        Alert.alert('Ops!', 'E-mail já cadastrado');
+                        break;
+                    default:
+                        break;
+                }
+            })
+            .finally(() => {
+                setLoading(false)
+            }) */
+    }
+
+
 
     return (
         <View style={estilos.container}>
             <View style={estilos.formulario}>
                 <TextInput
+                    placeholder='Nome'
+                    style={estilos.input}
+                    onChangeText={valor => setNome(valor)}
+                    keyboardType="default"
+                />
+                <TextInput
                     placeholder='E-mail'
                     style={estilos.input}
+                    onChangeText={valor => setEmail(valor)}
+                    keyboardType="email-address"
                 />
                 <TextInput
                     placeholder='Senha'
                     style={estilos.input}
+                    onChangeText={valor => setSenha(valor)}
+                    secureTextEntry
                 />
                 <View style={estilos.botoes}>
-                    <Button title='Cadastre-se' color="blue" />
+                    <Button disabled={loading} title='Cadastre-se' color="blue" onPress={cadastrar} />
+                    {loading && <ActivityIndicator size="small" color="blue" />}
                 </View>
 
             </View>
