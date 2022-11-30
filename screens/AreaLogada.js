@@ -14,11 +14,14 @@ const AreaLogada = ({ navigation }) => {
         signOut(auth).then(() => {
             navigation.replace("Inicial", { deslogado: true });
         }).catch(error => {
-            console.log(error);
             Alert.alert("Atenção", "Houve um erro ao sair do sistema. Tente novamente");
         }).finally(() => {
             setLoading(false);
         })
+    }
+
+    const completarCadastro = () => {
+        navigation.navigate("CompletarCadastro", { user });
     }
 
     return (
@@ -30,6 +33,7 @@ const AreaLogada = ({ navigation }) => {
             </View>
             <View style={estilos.geral}>
                 <Text>Você está na área logada.</Text>
+                <Button title='Complete seu cadastro' onPress={completarCadastro} />
             </View>
         </View>
     )
