@@ -1,6 +1,7 @@
 import { ActivityIndicator, Alert, Button, StyleSheet, TextInput, View } from 'react-native'
 import { useState } from 'react'
-import { auth } from "../config/firebaseConfig"
+import { db } from "../config/firebaseConfig"
+import { doc, setDoc, collection, getDocs, addDoc } from "firebase/firestore";
 
 const CompletarCadastro = ({ navigation, route }) => {
     const { user } = route.params;
@@ -11,10 +12,22 @@ const CompletarCadastro = ({ navigation, route }) => {
 
     const [loading, setLoading] = useState(false)
 
-    const cadastrarTudo = () => {
+    const cadastrarTudo = async () => {
+        // setLoading(true);
+        const docRef = doc(db, "users", userId);
+        const dados = {
+            nome,
+            email,
+            telefone
+        };
 
-        setLoading(true);
-
+        setDoc(docRef, dados)
+            .then(() => {
+                console.log("Document has been added successfully");
+            })
+            .catch(error => {
+                console.log(error);
+            })
     }
 
     return (
@@ -46,7 +59,7 @@ const CompletarCadastro = ({ navigation, route }) => {
                 />
 
                 <View style={estilos.botoes}>
-                    <Button disabled={loading} title='Salvar' color="blue" onPress={cadastrarTudo} />
+                    <Button disabled={loading} title='Atualizar' color="blue" onPress={cadastrarTudo} />
                     {loading && <ActivityIndicator size="small" color="blue" />}
                 </View>
 
