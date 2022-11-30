@@ -7,6 +7,7 @@ const AreaLogada = ({ navigation }) => {
     const [loading, setLoading] = useState(false)
 
     const user = auth.currentUser;
+    // console.log(user);
     console.log("Usuário logado: " + user.uid, user.email, user.displayName);
 
     const logout = () => {
