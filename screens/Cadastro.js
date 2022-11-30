@@ -1,43 +1,36 @@
-import { ActivityIndicator, Alert, Button, StyleSheet, Text, TextInput, View } from 'react-native'
+import { ActivityIndicator, Alert, Button, StyleSheet, TextInput, View } from 'react-native'
 import { useState } from 'react'
-import { auth, db } from "../config/firebaseConfig"
+import { auth } from "../config/firebaseConfig"
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 
-import { collection, getDocs, addDoc } from "firebase/firestore";
-
-const Cadastro = () => {
-
-
-    const [nome, setNome] = useState("");
+const Cadastro = ({ navigation }) => {
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
-
     const [loading, setLoading] = useState(false)
 
-    const cadastrar = async () => {
+    const cadastrar = () => {
 
         setLoading(true);
         createUserWithEmailAndPassword(auth, email, senha)
-            .then(async () => {
-                const currentUser = auth.currentUser;
-
-                /* essa doc ajudou:
-                https://firebase.google.com/docs/firestore/quickstart */
-                try {
-                    const docRef = await addDoc(collection(db, "users"), {
-                        id: currentUser.uid,
-                        nome,
-                        email
-                    });
-
-                    console.log("Document written with ID: ", docRef.id);
-                    navigation.replace("AreaLogada", { docId: docRef.id })
-                } catch (e) {
-                    console.error("Error adding document: ", e);
-                }
+            .then(() => {
+                Alert.alert("Conta criada com sucesso", "Desejar entrar?", [
+                    {
+                        text: "Cancelar",
+                        onPress: () => {
+                            return false;
+                        },
+                        style: "cancel",
+                    },
+                    {
+                        text: "Sim, leve-me ao seu líder",
+                        onPress: () => {
+                            navigation.replace("AreaLogada")
+                        },
+                        style: "default",
+                    },
+                ]);
             })
             .catch((error) => {
-                // console.log(error.code);
                 switch (error.code) {
                     case 'auth/email-already-in-use':
                         Alert.alert('Ops!', 'E-mail já cadastrado');
@@ -51,17 +44,9 @@ const Cadastro = () => {
             })
     }
 
-
-
     return (
         <View style={estilos.container}>
             <View style={estilos.formulario}>
-                <TextInput
-                    placeholder='Nome'
-                    style={estilos.input}
-                    onChangeText={valor => setNome(valor)}
-                    keyboardType="default"
-                />
                 <TextInput
                     placeholder='E-mail'
                     style={estilos.input}

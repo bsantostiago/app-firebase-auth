@@ -16,7 +16,12 @@ export default function App() {
       <StatusBar />
       <NavigationContainer>
         <Stack.Navigator initialRouteName='Inicial'>
-          <Stack.Screen name='Inicial' component={Inicial} options={{ headerShown: false }} />
+          <Stack.Screen
+            name='Inicial'
+            component={Inicial}
+            options={{ headerShown: false }}
+            initialParams={{ deslogado: false }}
+          />
           <Stack.Screen name='Login' component={Login} options={{
             title: 'Entre com suas credenciais',
             headerStyle: { backgroundColor: 'green' },

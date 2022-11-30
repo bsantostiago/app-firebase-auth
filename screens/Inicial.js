@@ -1,12 +1,24 @@
+import { useEffect } from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native'
 
-const Inicial = ({ navigation }) => {
+const Inicial = ({ navigation, route }) => {
+    let teste;
+    if (route.params?.deslogado) {
+        console.log("tem parametro");
+        const { deslogado } = route.params;
+        console.log(deslogado);
+        teste = deslogado;
+    }
+
     return (
         <View style={estilos.container}>
             <View style={estilos.introducao}>
                 <Text style={estilos.titulo}>React Native</Text>
                 <Text style={estilos.subtitulo}>Autenticação com Firebase</Text>
             </View>
+
+            {teste && <Text>Deslogou...</Text>}
+
             <View style={estilos.botoes}>
                 <Button title='Entre' color="green" onPress={() => navigation.navigate("Login")} />
                 <Button title='Cadastre-se' color="blue" onPress={() => navigation.navigate("Cadastro")} />
