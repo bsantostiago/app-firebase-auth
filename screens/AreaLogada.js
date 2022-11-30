@@ -24,6 +24,10 @@ const AreaLogada = ({ navigation }) => {
         navigation.navigate("CompletarCadastro", { user });
     }
 
+    const atualizarAcesso = () => {
+
+    }
+
     return (
         <View style={estilos.container}>
             <View style={estilos.topo}>
@@ -33,7 +37,12 @@ const AreaLogada = ({ navigation }) => {
             </View>
             <View style={estilos.geral}>
                 <Text>Você está na área logada.</Text>
+            </View>
+            <View style={estilos.geral}>
                 <Button title='Complete seu cadastro' onPress={completarCadastro} />
+            </View>
+            <View style={estilos.geral}>
+                <Button title='Atualizar dados de acesso' onPress={atualizarAcesso} color="green" />
             </View>
         </View>
     )
@@ -52,6 +61,9 @@ const estilos = StyleSheet.create({
     },
     bemVindo: {
         fontSize: 24,
+        marginVertical: 16
+    },
+    geral: {
         marginVertical: 16
     }
 

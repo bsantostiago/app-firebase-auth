@@ -1,7 +1,7 @@
 import { ActivityIndicator, Alert, Button, StyleSheet, TextInput, View } from 'react-native'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { db } from "../config/firebaseConfig"
-import { doc, setDoc, collection, getDocs, addDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc, collection, getDocs, addDoc } from "firebase/firestore";
 
 const CompletarCadastro = ({ navigation, route }) => {
     const { user } = route.params;
@@ -11,6 +11,26 @@ const CompletarCadastro = ({ navigation, route }) => {
     const [userId] = useState(user.uid);
 
     const [loading, setLoading] = useState(false)
+
+    useEffect(() => {
+        async function obterDados() {
+            try {
+                const docRef = doc(db, "users", userId);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    console.log(docSnap.data());
+                    setNome(docSnap.data().nome)
+                    setTelefone(docSnap.data().telefone)
+                } else {
+                    console.log("Document does not exist")
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        obterDados();
+    }, [])
+
 
     const cadastrarTudo = async () => {
         // setLoading(true);
@@ -50,12 +70,14 @@ const CompletarCadastro = ({ navigation, route }) => {
                     style={estilos.input}
                     onChangeText={valor => setNome(valor)}
                     keyboardType="default"
+                    value={nome}
                 />
                 <TextInput
                     placeholder='Telefone'
                     style={estilos.input}
                     onChangeText={valor => setTelefone(valor)}
                     keyboardType="phone-pad"
+                    value={telefone}
                 />
 
                 <View style={estilos.botoes}>
