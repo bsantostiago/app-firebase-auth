@@ -1,18 +1,43 @@
 import { ActivityIndicator, Alert, Button, StyleSheet, TextInput, View } from 'react-native'
 import { useEffect, useState } from 'react'
 import { db } from "../config/firebaseConfig"
-import { doc, setDoc, getDoc, collection, getDocs, addDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc, onSnapshot, collection, getDocs, addDoc } from "firebase/firestore";
+import { async } from '@firebase/util';
 
 const CompletarCadastro = ({ navigation, route }) => {
-    const { user } = route.params;
+    const { idAuth, emailAuth } = route.params;
+    // console.log("PARÂMETRO");
+    // console.log(idAuth, emailAuth);
+
     const [nome, setNome] = useState("");
     const [telefone, setTelefone] = useState("");
-    const [email, setEmail] = useState(user.email);
-    const [userId] = useState(user.uid);
+    const [email, setEmail] = useState(emailAuth);
+    const [userId] = useState(idAuth);
 
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
+        // const dbRef = collection(db, "users");
+        // onSnapshot(dbRef, docsSnap => {
+        //     docsSnap.forEach(doc => {
+        //         console.log(doc.data());
+        //     })
+        // });
+
+        async function obterDadosRealTime() {
+            try {
+                const dbRef = collection(db, "users");
+                onSnapshot(dbRef, docsSnap => {
+                    docsSnap.forEach(doc => {
+                        console.log(doc.data());
+                    })
+                });
+
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
         async function obterDados() {
             try {
                 const docRef = doc(db, "users", userId);
@@ -29,11 +54,12 @@ const CompletarCadastro = ({ navigation, route }) => {
             }
         }
         obterDados();
+        obterDadosRealTime();
     }, [])
 
 
     const cadastrarTudo = async () => {
-        // setLoading(true);
+        setLoading(true);
         const docRef = doc(db, "users", userId);
         const dados = {
             nome,
@@ -47,6 +73,8 @@ const CompletarCadastro = ({ navigation, route }) => {
             })
             .catch(error => {
                 console.log(error);
+            }).finally(() => {
+                setLoading(false)
             })
     }
 

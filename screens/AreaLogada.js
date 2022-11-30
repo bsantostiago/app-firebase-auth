@@ -21,7 +21,10 @@ const AreaLogada = ({ navigation }) => {
     }
 
     const completarCadastro = () => {
-        navigation.navigate("CompletarCadastro", { user });
+        navigation.navigate("CompletarCadastro", {
+            idAuth: user.uid,
+            emailAuth: user.email
+        });
     }
 
     const atualizarAcesso = () => {
