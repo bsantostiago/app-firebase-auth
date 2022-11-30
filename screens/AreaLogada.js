@@ -7,7 +7,10 @@ const AreaLogada = ({ navigation }) => {
     const [loading, setLoading] = useState(false)
 
     const user = auth.currentUser;
-    console.log("Usuário logado: " + user.uid, user.email);
+    console.log("USUÁRIO");
+    console.log(user);
+    console.log("--------");
+    // console.log("Usuário logado: " + user.uid, user.email);
 
     const logout = () => {
         setLoading(true);
@@ -23,12 +26,16 @@ const AreaLogada = ({ navigation }) => {
     const completarCadastro = () => {
         navigation.navigate("CompletarCadastro", {
             idAuth: user.uid,
-            emailAuth: user.email
+            emailAuth: user.email,
+
         });
     }
 
     const atualizarAcesso = () => {
-
+        navigation.navigate("AtualizarAcesso", {
+            idAuth: user.uid,
+            emailAuth: user.email
+        });
     }
 
     return (
