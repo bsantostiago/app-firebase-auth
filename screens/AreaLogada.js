@@ -7,7 +7,7 @@ const AreaLogada = ({ navigation }) => {
     const [loading, setLoading] = useState(false)
 
     const user = auth.currentUser;
-    console.log("Usuário logado: " + user.uid, user.email);
+    console.log("Usuário logado: " + user.uid, user.email, user.displayName);
 
     const logout = () => {
         setLoading(true);
@@ -24,7 +24,7 @@ const AreaLogada = ({ navigation }) => {
     return (
         <View style={estilos.container}>
             <View style={estilos.topo}>
-                <Text style={estilos.bemVindo}>Bem-vindo(a)</Text>
+                <Text style={estilos.bemVindo}>Bem-vindo(a) {user.displayName || ""}</Text>
                 <Button disabled={loading} title='Logout' onPress={logout} color="#D35400" />
                 {loading && <ActivityIndicator size="small" color="#D35400" />}
             </View>

@@ -1,9 +1,10 @@
 import { ActivityIndicator, Alert, Button, StyleSheet, TextInput, View } from 'react-native'
 import { useState } from 'react'
 import { auth } from "../config/firebaseConfig"
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 
 const Cadastro = ({ navigation }) => {
+    const [nome, setNome] = useState("");
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
     const [loading, setLoading] = useState(false)
@@ -13,6 +14,8 @@ const Cadastro = ({ navigation }) => {
         setLoading(true);
         createUserWithEmailAndPassword(auth, email, senha)
             .then(() => {
+                updateProfile(auth.currentUser, { displayName: nome })
+
                 Alert.alert("Conta criada com sucesso", "Desejar entrar?", [
                     {
                         text: "Cancelar",
@@ -47,6 +50,12 @@ const Cadastro = ({ navigation }) => {
     return (
         <View style={estilos.container}>
             <View style={estilos.formulario}>
+                <TextInput
+                    placeholder='Nome'
+                    style={estilos.input}
+                    onChangeText={valor => setNome(valor)}
+                    keyboardType="default"
+                />
                 <TextInput
                     placeholder='E-mail'
                     style={estilos.input}
