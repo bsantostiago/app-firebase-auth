@@ -26,11 +26,21 @@ const CompletarCadastro = ({ navigation, route }) => {
 
         async function obterDadosRealTime() {
             try {
-                const dbRef = collection(db, "users");
-                onSnapshot(dbRef, docsSnap => {
-                    docsSnap.forEach(doc => {
-                        console.log(doc.data());
-                    })
+                // const dbRef = collection(db, "users");
+                // onSnapshot(dbRef, docsSnap => {
+                //     docsSnap.forEach(doc => {
+                //         console.log(doc.data());
+                //     })
+                // });
+                const docRef = doc(db, "users", userId);
+                onSnapshot(docRef, (docSnap) => {
+                    if (docSnap.exists()) {
+                        console.log("Current data: ", docSnap.data());
+                        setNome(docSnap.data().nome)
+                        setTelefone(docSnap.data().telefone)
+                    } else {
+                        console.log("Document does not exist")
+                    }
                 });
 
             } catch (error) {
@@ -43,7 +53,7 @@ const CompletarCadastro = ({ navigation, route }) => {
                 const docRef = doc(db, "users", userId);
                 const docSnap = await getDoc(docRef);
                 if (docSnap.exists()) {
-                    console.log(docSnap.data());
+                    // console.log(docSnap.data());
                     setNome(docSnap.data().nome)
                     setTelefone(docSnap.data().telefone)
                 } else {
@@ -53,7 +63,7 @@ const CompletarCadastro = ({ navigation, route }) => {
                 console.log(error)
             }
         }
-        obterDados();
+        // obterDados();
         obterDadosRealTime();
     }, [])
 
