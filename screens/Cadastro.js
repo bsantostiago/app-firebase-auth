@@ -6,6 +6,8 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { collection, getDocs, addDoc } from "firebase/firestore";
 
 const Cadastro = () => {
+
+
     const [nome, setNome] = useState("");
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
@@ -29,6 +31,7 @@ const Cadastro = () => {
                     });
 
                     console.log("Document written with ID: ", docRef.id);
+                    navigation.replace("AreaLogada", { docId: docRef.id })
                 } catch (e) {
                     console.error("Error adding document: ", e);
                 }

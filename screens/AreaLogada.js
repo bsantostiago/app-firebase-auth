@@ -5,7 +5,10 @@ import { auth, db } from "../config/firebaseConfig"
 import { signOut } from 'firebase/auth';
 import { collection, getDocs, doc, getDoc } from "firebase/firestore";
 
-const AreaLogada = ({ navigation }) => {
+const AreaLogada = ({ navigation, route }) => {
+    const docID = route.params;
+    console.log("DOC ID:" + docID);
+
     const user = auth.currentUser;
     const [dados, setDados] = useState();
 
