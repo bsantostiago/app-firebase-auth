@@ -32,6 +32,7 @@ const AreaLogada = ({ navigation }) => {
     }
 
     const atualizarAcesso = () => {
+        navigation.navigate("AtualizarAcesso");
         navigation.navigate("AtualizarAcesso", {
             idAuth: user.uid,
             emailAuth: user.email

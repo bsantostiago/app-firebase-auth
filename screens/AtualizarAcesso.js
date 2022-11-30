@@ -1,45 +1,40 @@
 import { ActivityIndicator, Alert, Button, StyleSheet, TextInput, View } from 'react-native'
 import { useState } from 'react'
 import { auth } from "../config/firebaseConfig"
-import { updateCurrentUser, updateEmail, updatePassword } from 'firebase/auth';
+import { onAuthStateChanged, updateCurrentUser, updateEmail, updatePassword } from 'firebase/auth';
 
-const AtualizarAcesso = ({ navigation, route }) => {
-    const { idAuth, emailAuth } = route.params;
-    const [email, setEmail] = useState(emailAuth);
-    const [userId] = useState(idAuth);
+const AtualizarAcesso = ({ navigation }) => {
+
+    const [email, setEmail] = useState();
+    const [userId, setUserId] = useState();
     const [loading, setLoading] = useState(false)
 
-    const atualizarDados = () => {
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            console.log(user.uid, user.email);
+            setEmail(user.email);
+            setUserId(user.uid);
+        } else {
+            // User is signed out
+            // ...
+        }
+    });
 
+    const atualizarDados = () => {
         setLoading(true);
-        createUserWithEmailAndPassword(auth, email, senha)
-            .then(() => {
-                Alert.alert("Conta criada com sucesso", "Desejar entrar?", [
-                    {
-                        text: "Cancelar",
-                        onPress: () => {
-                            return false;
-                        },
-                        style: "cancel",
-                    },
-                    {
-                        text: "Sim, leve-me ao seu líder",
-                        onPress: () => {
-                            navigation.replace("AreaLogada")
-                        },
-                        style: "default",
-                    },
-                ]);
-            })
-            .catch((error) => {
-                switch (error.code) {
-                    case 'auth/email-already-in-use':
-                        Alert.alert('Ops!', 'E-mail já cadastrado');
-                        break;
-                    default:
-                        break;
-                }
-            })
+
+        updateEmail(auth.currentUser, email).then(() => {
+            Alert.alert('Informação', 'E-mail alterado com sucesso!');
+        }).catch((error) => {
+            switch (error.code) {
+                case 'auth/email-already-in-use':
+                    Alert.alert('Ops!', 'E-mail já cadastrado');
+                    break;
+                default:
+                    break;
+            }
+
+        })
             .finally(() => {
                 setLoading(false)
             })
@@ -53,7 +48,7 @@ const AtualizarAcesso = ({ navigation, route }) => {
                     style={estilos.input}
                     onChangeText={valor => setEmail(valor)}
                     keyboardType="email-address"
-                    value={email}
+                // value={email}
                 />
                 <TextInput
                     placeholder='Senha'
